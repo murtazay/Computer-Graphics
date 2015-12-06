@@ -154,10 +154,10 @@ HW4::resizeGL(int w, int h)
 
     // copy matrix to vertex shader
     glUseProgram(m_program[0].programId());
-    glUniformMatrix4fv(m_uniform[0][MODEL],   1, GL_FALSE, m_modelview.constData());
+    glUniformMatrix4fv(m_uniform[0][MODEL],   1, GL_FALSE, m_model.constData());
     glUniformMatrix4fv(m_uniform[0][PROJ], 1, GL_FALSE, m_projection.constData());
     glUseProgram(m_program[1].programId());
-    glUniformMatrix4fv(m_uniform[1][MODEL],   1, GL_FALSE, m_modelview.constData());
+    glUniformMatrix4fv(m_uniform[1][MODEL],   1, GL_FALSE, m_model.constData());
     glUniformMatrix4fv(m_uniform[1][PROJ], 1, GL_FALSE, m_projection.constData());
     // todo
 }
@@ -635,7 +635,7 @@ HW4::initShaders()
 	uniforms["u_Sampler"   ] = SAMPLER;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-	initShader(TEX_SHADER, QString(":/vshader4a1.glsl"), QString(":/fshader4a1.glsl"), uniforms);
+    initShader(TEX_SHADER, QString(":/vshader4a1.glsl"), QString(":/fshader4a.glsl"), uniforms);
 
 	// reset uniform hash table for next shader
 	uniforms.clear();
@@ -644,7 +644,7 @@ HW4::initShaders()
 	uniforms["u_Projection"] = PROJ;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-	initShader(WIRE_SHADER, QString(":/vshader4a2.glsl"), QString(":/fshader4a2.glsl"), uniforms);
+    initShader(WIRE_SHADER, QString(":/vshader4a2.glsl"), QString(":/fshader4b.glsl"), uniforms);
 
 	// reset uniform hash table for next shader
 	uniforms.clear();
@@ -654,7 +654,7 @@ HW4::initShaders()
 	uniforms["u_LightDirection"] = LIGHTDIR;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-	initShader(FLAT_SHADER, QString(":/vshader4a3.glsl"), QString(":/fshader4a3.glsl"), uniforms);
+    initShader(FLAT_SHADER, QString(":/vshader4a3.glsl"), QString(":/fshader4c.glsl"), uniforms);
 
 	uniforms.clear();
 	uniforms["u_Model"         ] = MODEL;
@@ -663,7 +663,7 @@ HW4::initShaders()
 	uniforms["u_LightDirection"] = LIGHTDIR;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-	initShader(SMOOTH_SHADER, QString(":/vshader4a4.glsl"), QString(":/fshader4a4.glsl"), uniforms);
+    initShader(SMOOTH_SHADER, QString(":/vshader4a4.glsl"), QString(":/fshader4d.glsl"), uniforms);
 
 	uniforms.clear();
 	uniforms["u_Model"         ] = MODEL;
@@ -673,7 +673,7 @@ HW4::initShaders()
 	uniforms["u_Sampler"       ] = SAMPLER;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-	initShader(SMOOTH_TEX, QString(":/vshader4a5.glsl"), QString(":/fshader4a5.glsl"), uniforms);
+    initShader(SMOOTH_TEX, QString(":/vshader4a5.glsl"), QString(":/fshader4e.glsl"), uniforms);
 }
 
 

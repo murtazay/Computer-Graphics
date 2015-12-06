@@ -15,9 +15,9 @@
         <file>fshader3b2.glsl</file>
         <file>vshader3b1.glsl</file>
         <file>vshader3b2.glsl</file>
-        <file>fshader4a1.glsl</file>
-        <file>fshader4a2.glsl</file>
-        <file>vshader4a1.glsl</file>
-        <file>vshader4a2.glsl</file>
+        <file>fshader4a.glsl</file>
+        <file>fshader4b.glsl</file>
+        <file>vshader4a.glsl</file>
+        <file>vshader4b.glsl</file>
     </qresource>
 </RCC>

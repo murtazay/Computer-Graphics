@@ -74,33 +74,38 @@ private:
 	int		  m_geometryMode;
 	int		  m_sizeMode;
 	int		  m_speed;
-	QComboBox	 *m_comboBoxDisplay;		// display mode combobox
-	QComboBox	 *m_comboBoxGeom;		// geometry combobox
-	QSlider		 *m_sliderSize;
-	QSpinBox	 *m_spinBoxSize;
-	QSlider		 *m_sliderSpeed;		// speed slider
-	QSpinBox	 *m_spinBoxSpeed;		// speed combobox
-	QPushButton	 *m_buttonStart;
-	QPushButton	 *m_buttonStop;
-	std::vector<vec3> m_points;			
-	std::vector<vec2> m_coords;
-	std::vector<vec3> m_normals;
-	std::vector<vec3> m_colors;
-	int		  m_numPoints;			 // number of 2D points
+    int		  m_numPoints;			 // number of 2D points
+
+    std::vector<vec3>  m_points;
+    std::vector<vec2>  m_coords;
+    std::vector<vec3>  m_normals;
+    std::vector<vec3>  m_colors;
+    std::vector<ushort>m_indices_triangles;
+    std::vector<ushort>m_indices_wireframe;
+    QGLShaderProgram   m_program[10];
+    GLint              m_uniform[10][16];
+
+    QComboBox	 *m_comboBoxDisplay;    // display mode combobox
+    QComboBox	 *m_comboBoxGeom;		// geometry combobox
+    QSlider		 *m_sliderSize;
+    QSpinBox	 *m_spinBoxSize;
+    QSlider		 *m_sliderSpeed;		// speed slider
+    QSpinBox	 *m_spinBoxSpeed;		// speed combobox
+    QPushButton	 *m_buttonStart;
+    QPushButton	 *m_buttonStop;
+
 	QMatrix4x4	  m_projection;			 // 4x4 projection matrix
-	QMatrix4x4	  m_model;			 // 4x4 model matrix
+    QMatrix4x4	  m_model;               // 4x4 model matrix
 	QMatrix4x4	  m_cameraView;			 // 4x4 view  matrix
-	QImage		  m_image;			 // texture image
+    QImage		  m_image;               // texture image
 	GLuint		  m_texture;			 // shader index to texture unit
 	QVector3D	  m_vertices [MAXGRID][MAXGRID]; // vector of 3D points (XYZ)
 	QVector2D	  m_texCoords[MAXGRID][MAXGRID]; // vector of 2D coords (UV)
 	QVector3D	  m_vertNorms[MAXGRID][MAXGRID]; // vector of normals
 	QVector3D	  m_faceNorms[2][MAXGRID][MAXGRID]; // vector of normals
 	float		  m_force    [MAXGRID][MAXGRID];
-	float		  m_veloc    [MAXGRID][MAXGRID];
-	std::vector<ushort>m_indices_triangles;
-	std::vector<ushort>m_indices_wireframe;
-	int		  m_resetMode;
+    float		  m_veloc    [MAXGRID][MAXGRID];
+    int           m_resetMode;
 	GLuint		  m_vertexBuffer;
 	GLuint		  m_texBuffer;
 	GLuint		  m_normalBuffer;
