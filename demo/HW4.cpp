@@ -742,7 +742,7 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
     }
     if(number == FLAT_SHADER || number == SMOOTH_SHADER || number == SMOOTH_TEX){
         glUniform3f(m_uniform[number][LIGHTDIR], m_lightEye.x(), m_lightEye.y(), m_lightEye.z());
-    }    
+    }
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
