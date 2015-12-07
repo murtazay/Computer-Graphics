@@ -681,6 +681,7 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
     //Complie Vertex Shader
     if(!m_program[number].addShaderFromSourceFile(QGLShader::Vertex, vertexShader)){
         QMessageBox::critical(0, "Error", "Vertex shader error", QMessageBox::Ok);
+        qDebug() << m_program[number].log();
         QApplication::quit();
     }
     //Compile fragment Shader
