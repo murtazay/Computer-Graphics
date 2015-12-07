@@ -24,41 +24,42 @@
 class HW4 : public HW {
 	Q_OBJECT
 public:
-	HW4		(QWidget *parent = 0);		// constructor
+    HW4                         (QWidget *parent = 0);		// constructor
 	QGroupBox*	controlPanel	();		// create control panel
-	void		reset		();		// reset parameters
+    void		reset           ();		// reset parameters
 
 public slots:
 	void		changeDisplay	(int);		// change display mode
-	void		changeGeom	(int);		// change geometry
-	void		changeSize	(int);		// change grid size
-	void		changeSpeed	(int);		// change animation speed
+    void		changeGeom      (int);		// change geometry
+    void		changeSize      (int);		// change grid size
+    void		changeSpeed     (int);		// change animation speed
 	void		startAnimation  ();
 	void		stopAnimation   ();
 
 protected:
 	void		initializeGL	();		// init GL state
-	void		resizeGL	(int, int);	// resize GL widget
-	void		paintGL		();		// render GL scene
-	void		initTexture	();		// init texture image
-	void		initShaders	();		// init shaders
-	void		resetMesh	();		// reset height of surface (z)
-	void		getForce	();		// used to compute new height
-	void		getVelocity	();		// used to compute new height
-	void		getPosition	();		// get surface height
-	void		setDT		();		// used to compute new height
+    void		resizeGL        (int, int);	// resize GL widget
+    void		paintGL         ();		// render GL scene
+    void		initTexture     ();		// init texture image
+    void		initShaders     ();		// init shaders
+    void		resetMesh       ();		// reset height of surface (z)
+    void		getForce        ();		// used to compute new height
+    void		getVelocity     ();		// used to compute new height
+    void		getPosition     ();		// get surface height
+    void		setDT           ();		// used to compute new height
 	void		initVertices	();		// init XY coords of mesh
-	void		initBuffers	();		// init vertices
-	void		flatten2D	();		// copy 2D array into 1D array
+    void		initBuffers     ();		// init vertices
+    void		flatten2D       ();		// copy 2D array into 1D array
 	void		uploadVertices	();		// copy 3D vertices to GPU
 	void		uploadTexCoords	();		// copy 2D texture coords to GPU
 	void		uploadIndices	();		// copy vertex indices to GPU
 	void		uploadNormals   ();		// copy normals to GPU
 	void		uploadColors    ();		// copy colors to GPU
+    void        initShader      (int, QString, QString, QMap<QString, int>);
 	void		mousePressEvent	(QMouseEvent *);
 	void		mouseMoveEvent	(QMouseEvent *);
-	void		wheelEvent	(QWheelEvent *event);
-	void		timerEvent	(QTimerEvent *e);
+    void		wheelEvent      (QWheelEvent *event);
+    void		timerEvent      (QTimerEvent *e);
 	void		getFaceNorms	();
 	void		getVertNorms	();
 	vec2		cartesianToSpherical(vec3&);

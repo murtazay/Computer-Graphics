@@ -64,7 +64,7 @@ HW4::HW4(QWidget *parent)
 	m_cameraRotation.setY(phi);
 
 	// init camera axes: right (u), up (v), dir (n)
-	vec3 dir = (m_cameraTarget - m_cameraEye).normalized();
+    vec3 dir     = (m_cameraTarget - m_cameraEye).normalized();
 	vec3 worldUp = vec3(0.0f, m_cameraUp, 0.0f);
 	vec3 right   = vec3::crossProduct(dir, worldUp).normalized();
 	vec3 up      = vec3::crossProduct(right, dir).normalized();
@@ -268,7 +268,7 @@ HW4::paintGL()
 	glVertexAttribPointer	 (ATTRIB_VERTEX, 3, GL_FLOAT, false, 0, NULL);
 
 	// enable the assignment of attribute vertex variable
-	glBindBuffer(GL_ARRAY_BUFFER, m_lightColorBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_lightColorBuffer);
 	glEnableVertexAttribArray(ATTRIB_COLOR);
 
 	// assign the buffer object to the attribute vertex variable
@@ -626,7 +626,7 @@ HW4::initTexture()
 void
 HW4::initShaders()
 {
-	UniformMap uniforms;
+    QMap<QString,GLint> uniforms;
 
 	// init uniform hash table based on uniform variable names and location IDs
 	uniforms["u_Model"     ] = MODEL;
@@ -635,7 +635,7 @@ HW4::initShaders()
 	uniforms["u_Sampler"   ] = SAMPLER;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-    initShader(TEX_SHADER, QString(":/vshader4a1.glsl"), QString(":/fshader4a.glsl"), uniforms);
+    initShader(TEX_SHADER, QString(":/vshader4a.glsl"), QString(":/fshader4a.glsl"), uniforms);
 
 	// reset uniform hash table for next shader
 	uniforms.clear();
@@ -644,7 +644,7 @@ HW4::initShaders()
 	uniforms["u_Projection"] = PROJ;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-    initShader(WIRE_SHADER, QString(":/vshader4a2.glsl"), QString(":/fshader4b.glsl"), uniforms);
+    initShader(WIRE_SHADER, QString(":/vshader4b.glsl"), QString(":/fshader4b.glsl"), uniforms);
 
 	// reset uniform hash table for next shader
 	uniforms.clear();
@@ -654,7 +654,7 @@ HW4::initShaders()
 	uniforms["u_LightDirection"] = LIGHTDIR;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-    initShader(FLAT_SHADER, QString(":/vshader4a3.glsl"), QString(":/fshader4c.glsl"), uniforms);
+    initShader(FLAT_SHADER, QString(":/vshader4c.glsl"), QString(":/fshader4c.glsl"), uniforms);
 
 	uniforms.clear();
 	uniforms["u_Model"         ] = MODEL;
@@ -663,7 +663,7 @@ HW4::initShaders()
 	uniforms["u_LightDirection"] = LIGHTDIR;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-    initShader(SMOOTH_SHADER, QString(":/vshader4a4.glsl"), QString(":/fshader4d.glsl"), uniforms);
+    initShader(SMOOTH_SHADER, QString(":/vshader4d.glsl"), QString(":/fshader4d.glsl"), uniforms);
 
 	uniforms.clear();
 	uniforms["u_Model"         ] = MODEL;
@@ -673,10 +673,77 @@ HW4::initShaders()
 	uniforms["u_Sampler"       ] = SAMPLER;
 
 	// compile shader, bind attribute vars, link shader, and initialize uniform var table
-    initShader(SMOOTH_TEX, QString(":/vshader4a5.glsl"), QString(":/fshader4e.glsl"), uniforms);
+    initShader(SMOOTH_TEX, QString(":/vshader4e.glsl"), QString(":/fshader4e.glsl"), uniforms);
 }
 
+void
+HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<QString,int> map){
+    //Complie Vertex Shader
+    if(!m_program[number].addShaderFromSourceFile(QGLShader::Vertex, vertexShader)){
+        QMessageBox::critical(0, "Error", "Vertex shader error", QMessageBox::Ok);
+        QApplication::quit();
+    }
+    //Compile fragment Shader
+    if(!m_program[number].addShaderFromSourceFile(QGLShader::Fragment, fragmentShader)){
+        QMessageBox::critical(0, "Error", "Fragment shader error",QMessageBox::Ok);
+        QApplication::quit();
+    }
 
+    // bind the attribute variable in the glsl program with a generic vertex attribute index;
+    // values provided via ATTRIB_VERTEX will modify the value of "a_position")
+    glBindAttribLocation(m_program[number].programId(), ATTRIB_VERTEX, "a_Position");
+
+    if(number == TEX_SHADER || number ==SMOOTH_TEX){
+        // bind the attribute variable in the glsl program with a generic vertex attribute index;
+        // values provided via ATTRIB_TEXCOORD will modify the value of "a_TexCoord")
+        glBindAttribLocation(m_program[number].programId(), ATTRIB_TEXCOORD, "a_TexCoord");
+    }
+
+    if(number == FLAT_SHADER || number == SMOOTH_SHADER || number == SMOOTH_TEX){
+        // bind the attribute variable in the glsl program with a generic vertex attribute index;
+        // values provided via ATTRIB_NORMAL will modify the value of "a_Normal")
+        glBindAttribLocation(m_program[number].programId(), ATTRIB_NORMAL, "a_Normal");
+    }
+
+    if(number == FLAT_SHADER || number == SMOOTH_SHADER){
+        // bind the attribute variable in the glsl program with a generic vertex attribute index;
+        // values provided via ATTRIB_COLOR will modify the value of "a_Color")
+        glBindAttribLocation(m_program[number].programId(), ATTRIB_COLOR, "a_Color");
+    }
+
+    // link shader pipeline; attribute bindings go into effect at this point
+    if(!m_program[number].link()) {
+        QMessageBox::critical(0, "Error", "Could not link shader", QMessageBox::Ok);
+        QApplication::quit();
+    }
+
+    QMap<QString, int>::iterator i;
+    for(i = map.begin(); i != map.end(); ++i){
+        //QString name = i.key();
+        const char* name = i.key().toLatin1().data();
+        m_uniform[number][i.value()] = glGetUniformLocation(m_program[number].programId(), name);
+        if((int) m_uniform[number][i.value()] < 0){
+            qDebug() << "Failed to get the storage location of " << i.key() << " " << number;
+            exit(-1);
+        }
+    }
+
+    // bind the glsl program
+    glUseProgram(m_program[number].programId());
+
+    // init model matrix; pass it to vertex shader along with theta and twist flag
+    m_model.setToIdentity();
+    m_projection.setToIdentity();
+    glUniformMatrix4fv(m_uniform[number][MODEL], 1, GL_FALSE, m_model.constData());
+    glUniformMatrix4fv(m_uniform[number][VIEW], 1, GL_FALSE, m_cameraView.constData());
+    glUniformMatrix4fv(m_uniform[number][PROJ], 1, GL_FALSE, m_projection.constData());
+    if(number == TEX_SHADER || number == SMOOTH_SHADER){
+        glUniform1i(m_uniform[number][SAMPLER], GL_TEXTURE0);
+    }
+    if(number == FLAT_SHADER || number == SMOOTH_SHADER || number == SMOOTH_TEX){
+        glUniform3f(m_uniform[number][LIGHTDIR], m_lightEye.x(), m_lightEye.y(), m_lightEye.z());
+    }
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // HW4::initVertices:
@@ -803,7 +870,7 @@ void HW4::getVertNorms()
 {
 	for(int i = 0; i < m_grid; ++i) {
 		for(int j = 0; j < m_grid; ++j) {
-			// for each vertex, average normals from all faces sharing vertex;
+            // for each vertex, average normals from all faces sharing vertex;
 			// check each quadrant in turn
 			vec3 avg;
 			// right & above
