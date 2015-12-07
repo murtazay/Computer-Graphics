@@ -55,7 +55,7 @@ protected:
 	void		uploadIndices	();		// copy vertex indices to GPU
 	void		uploadNormals   ();		// copy normals to GPU
 	void		uploadColors    ();		// copy colors to GPU
-    void        initShader      (int, QString, QString, QMap<QString, int>);
+    void        initShader      (int, QString, QString, QMap<QString, GLuint>);
 	void		mousePressEvent	(QMouseEvent *);
 	void		mouseMoveEvent	(QMouseEvent *);
     void		wheelEvent      (QWheelEvent *event);

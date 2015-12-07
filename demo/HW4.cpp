@@ -626,7 +626,7 @@ HW4::initTexture()
 void
 HW4::initShaders()
 {
-    QMap<QString,GLint> uniforms;
+    QMap<QString,GLuint> uniforms;
 
 	// init uniform hash table based on uniform variable names and location IDs
 	uniforms["u_Model"     ] = MODEL;
@@ -677,7 +677,7 @@ HW4::initShaders()
 }
 
 void
-HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<QString,int> map){
+HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<QString,GLuint> map){
     //Complie Vertex Shader
     if(!m_program[number].addShaderFromSourceFile(QGLShader::Vertex, vertexShader)){
         QMessageBox::critical(0, "Error", "Vertex shader error", QMessageBox::Ok);
@@ -717,7 +717,7 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
         QApplication::quit();
     }
 
-    QMap<QString, int>::iterator i;
+    QMap<QString, GLuint>::iterator i;
     for(i = map.begin(); i != map.end(); ++i){
         //QString name = i.key();
         const char* name = i.key().toLatin1().data();
@@ -742,7 +742,7 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
     }
     if(number == FLAT_SHADER || number == SMOOTH_SHADER || number == SMOOTH_TEX){
         glUniform3f(m_uniform[number][LIGHTDIR], m_lightEye.x(), m_lightEye.y(), m_lightEye.z());
-    }
+    }    
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
