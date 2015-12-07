@@ -731,7 +731,7 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
     // bind the glsl program
     glUseProgram(m_program[number].programId());
 
-    // init model matrix; pass it to vertex shader along with theta and twist flag
+    // init model matrix; pass it to vertex shader
     m_model.setToIdentity();
     m_projection.setToIdentity();
     glUniformMatrix4fv(m_uniform[number][MODEL], 1, GL_FALSE, m_model.constData());
