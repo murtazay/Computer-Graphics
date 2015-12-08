@@ -1,3 +1,4 @@
+#version 130
 #ifdef GL_ES
 precision mediump float;	// set default precision to medium
 #endif
@@ -6,7 +7,7 @@ varying   vec3  v_Color;
 varying   vec3  v_PositionWorldSpace;
 varying   vec3  v_EyeDirectionCameraSpace;
 varying   vec3  v_LightDirectionCameraSpace;
-varying   vec3  v_NormalCameraSpace;
+flat in   vec3  v_NormalCameraSpace;
 
 void main() {
     vec3 LightColor  = vec3(1.0f,1.0f,1.0f);

@@ -5,31 +5,28 @@ precision mediump float;            // set default precision to medium
 attribute vec3	a_Position;         // attribute variable: position vector
 attribute vec3  a_Normal;
 attribute vec3  a_Color;
-varying   vec4  v_Color;
+
+varying   vec3  v_Color;
+varying   vec3  v_PositionWorldSpace;
+varying   vec3  v_EyeDirectionCameraSpace;
+varying   vec3  v_LightDirectionCameraSpace;
+varying   vec3  v_NormalCameraSpace;
+
 uniform   vec3  u_LightDirection;
-uniform	  mat4	u_Model;            // uniform variable for passing modelview matrix
-uniform   mat4  u_View;
+uniform	  mat4	u_Model;            // uniform variable for passing model matrix
+uniform   mat4  u_View;             // uniform variable for passing view matrix
 uniform	  mat4	u_Projection;       // uniform variable for passing projection matrix
 
 void main() {
-    //normalize vectors
-    vec3 pos = vec3(u_View * u_Model * vec4(a_Position,1.0f));
-    vec3 N   = normalize(vec3(u_View * u_Model * vec4(a_Normal,1.0f)));
-    vec3 L   = normalize(u_LightDirection - pos);
-    vec3 E   = normalize(pos * -1.0f);
-    vec3 R   = normalize(2.0f*dot(L,N) * N - L);
+    gl_Position = u_Projection * u_View * u_Model * vec4(a_Position,1.0f);
 
-    //diffuse
-    float kD      = max(dot(a_Normal, u_LightDirection),0.0);
-    vec3 diffuse  = vec3(0.2f,0.9f,1.0f) * kD;
-    //ambient
-    vec3 ambient  = vec3(0.1f,0.1f,0.1f) * kD;
-    //specular
-    float kS      = pow(max(dot(N,R), 0.0f), 0.7f);
-    vec3 specular = kS * vec3(0.6f, 0.5f, 0.3f);
-    if(dot(L,N) < 0.0f){
-        specular  = vec3(0.0f,0.0f,0.0f);
-    }
-    v_Color       = vec4(ambient + diffuse + specular, 1.0f);
-    gl_Position   = u_Projection * u_View * u_Model * vec4(a_Position,1.0f);
+    v_PositionWorldSpace = vec3(u_Model * vec4(a_Position,1.0f));
+
+    v_EyeDirectionCameraSpace = vec3(0.0f,0.0f,0.0f) - vec3(u_View * u_Model * vec4(a_Position, 1.0f));
+
+    v_LightDirectionCameraSpace = vec3(u_View * vec4(u_LightDirection,0.0f));
+
+    v_NormalCameraSpace = vec3(u_View * u_Model * vec4(a_Normal, 0.0f));
+
+    v_Color = a_Color;
 }

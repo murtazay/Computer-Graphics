@@ -1,3 +1,4 @@
+#version 130
 #ifdef GL_ES
 precision mediump float;            // set default precision to medium
 #endif
@@ -10,7 +11,7 @@ varying   vec3  v_Color;
 varying   vec3  v_PositionWorldSpace;
 varying   vec3  v_EyeDirectionCameraSpace;
 varying   vec3  v_LightDirectionCameraSpace;
-varying   vec3  v_NormalCameraSpace;
+flat out   vec3  v_NormalCameraSpace;
 
 uniform   vec3  u_LightDirection;
 uniform	  mat4	u_Model;            // uniform variable for passing model matrix

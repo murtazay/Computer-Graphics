@@ -152,14 +152,6 @@ HW4::resizeGL(int w, int h)
     m_projection.setToIdentity();
     m_projection.perspective(45.0f, aspect, 0.1f, 10.f);
 
-    // copy matrix to vertex shader
-    glUseProgram(m_program[0].programId());
-    glUniformMatrix4fv(m_uniform[0][MODEL],   1, GL_FALSE, m_model.constData());
-    glUniformMatrix4fv(m_uniform[0][PROJ], 1, GL_FALSE, m_projection.constData());
-    glUseProgram(m_program[1].programId());
-    glUniformMatrix4fv(m_uniform[1][MODEL],   1, GL_FALSE, m_model.constData());
-    glUniformMatrix4fv(m_uniform[1][PROJ], 1, GL_FALSE, m_projection.constData());
-    // todo
 }
 
 
@@ -390,7 +382,69 @@ HW4::controlPanel()
 void
 HW4::reset()
 {
-    //todo
+    // reset parameters
+    m_grid		= 32;
+    m_displayMode	= TEXTURED_WIREFRAME;
+    m_geometryMode	= MIDDLEBLOCK;
+    m_speed		= 1;
+    m_angularSpeed	= -30.0f;
+    m_wave		= false;
+
+    m_comboBoxDisplay->setCurrentIndex(m_displayMode);
+    m_comboBoxGeom->setCurrentIndex(m_geometryMode);
+    m_sliderSize->setValue(m_grid);
+    m_sliderSpeed->setValue(m_speed);
+
+    // light position and direction
+    m_lightEye      = vec3(1.0f, -2.0f, 2.0f);
+    m_lightTarget   = vec3(0, 0, 0);
+    m_lightRotation = cartesianToSpherical(m_lightEye);
+
+    // keep phi within -2PI to +2PI for easy 'up' comparison;
+    // if phi is between 0 to PI or -PI to -2PI, make 'up' be +Y, otherwise make it -Y
+    float phi = m_lightRotation.y();
+    checkPhi(phi, m_lightUp);
+    m_lightRotation.setY(phi);
+
+    // camera position and direction
+    m_cameraEye      = vec3(1.0f, -4.0f, 3.0f);
+    m_cameraTarget   = vec3(0, 0, 0);
+    m_cameraRotation = cartesianToSpherical(m_cameraEye);
+
+    // keep phi within -2PI to +2PI for easy 'up' comparison;
+    // If phi is between 0 to PI or -PI to -2PI, make 'up' be +Y, otherwise make it -Y
+    phi   = m_cameraRotation.y();
+    checkPhi(phi, m_cameraUp);
+    m_cameraRotation.setY(phi);
+
+    // init camera axes: right (u), up (v), dir (n)
+    vec3 dir     = (m_cameraTarget - m_cameraEye).normalized();
+    vec3 worldUp = vec3(0.0f, m_cameraUp, 0.0f);
+    vec3 right   = vec3::crossProduct(dir, worldUp).normalized();
+    vec3 up      = vec3::crossProduct(right, dir).normalized();
+
+    // init lookat matrix
+    m_cameraView.setToIdentity();
+    m_cameraView.lookAt(m_cameraEye, m_cameraTarget, up);
+
+    stopAnimation();
+
+    // init XY vertices in mesh and texture coords
+    initVertices();
+
+    // init Z values in height field
+    resetMesh();
+
+    // set dt based on m_grid size and user selection for m_speed
+    setDT();
+
+    // copy to GPU and redraw
+    uploadVertices();
+    uploadIndices();
+    uploadColors();
+    uploadNormals();
+    uploadTexCoords();
+    updateGL();
 }
 
 
@@ -676,6 +730,11 @@ HW4::initShaders()
     initShader(SMOOTH_TEX, QString(":/vshader4e.glsl"), QString(":/fshader4e.glsl"), uniforms);
 }
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// HW4::initShader:
+//
+// Initialize vertex and fragment shaders.
+//
 void
 HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<QString,GLuint> map){
     //Complie Vertex Shader
@@ -687,6 +746,7 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
     //Compile fragment Shader
     if(!m_program[number].addShaderFromSourceFile(QGLShader::Fragment, fragmentShader)){
         QMessageBox::critical(0, "Error", "Fragment shader error",QMessageBox::Ok);
+        qDebug() << m_program[number].log();
         QApplication::quit();
     }
 
@@ -731,19 +791,6 @@ HW4::initShader(int number, QString vertexShader, QString fragmentShader, QMap<Q
 
     // bind the glsl program
     glUseProgram(m_program[number].programId());
-
-    // init model matrix; pass it to vertex shader
-    m_model.setToIdentity();
-    m_projection.setToIdentity();
-    glUniformMatrix4fv(m_uniform[number][MODEL], 1, GL_FALSE, m_model.constData());
-    glUniformMatrix4fv(m_uniform[number][VIEW], 1, GL_FALSE, m_cameraView.constData());
-    glUniformMatrix4fv(m_uniform[number][PROJ], 1, GL_FALSE, m_projection.constData());
-    if(number == TEX_SHADER || number == SMOOTH_SHADER){
-        glUniform1i(m_uniform[number][SAMPLER], GL_TEXTURE0);
-    }
-    if(number == FLAT_SHADER || number == SMOOTH_SHADER || number == SMOOTH_TEX){
-        glUniform3f(m_uniform[number][LIGHTDIR], m_lightEye.x(), m_lightEye.y(), m_lightEye.z());
-    }
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1050,7 +1097,6 @@ HW4::flatten2D()
 void
 HW4::changeDisplay(int val)
 {
-
 	m_displayMode = val;
 	updateGL();
 }
@@ -1119,6 +1165,8 @@ HW4::changeSize(int val)
     uploadVertices();
     uploadTexCoords();
     uploadIndices();
+    uploadColors();
+    uploadNormals();
 
     // draw
     updateGL();
