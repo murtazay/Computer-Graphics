@@ -5,6 +5,7 @@
 // HW4.cpp - HW4 class
 //
 // Written by: George Wolberg, 2015
+// Modified by: Lukas Rascius,Murtaza Yaqoob and Ethan Graber, 2015
 // ===============================================================
 
 #include "HW4.h"

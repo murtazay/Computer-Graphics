@@ -5,6 +5,7 @@
 // HW4.h - Header file for HW4 class
 //
 // Written by: George Wolberg, 2015
+// Modified by: Lukas Rascius,Murtaza Yaqoob and Ethan Graber, 2015
 // ======================================================================
 
 #ifndef HW4_H
