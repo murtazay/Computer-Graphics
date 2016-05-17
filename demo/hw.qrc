@@ -1,29 +1,22 @@
 <RCC>
     <qresource prefix="/">
-        <file>vshader0c.glsl</file>
-        <file>fshader0c.glsl</file>
-        <file>fshader2a.glsl</file>
-        <file>vshader2a.glsl</file>
-        <file>fshader2b.glsl</file>
-        <file>vshader2b.glsl</file>
         <file>mandrill.jpg</file>
-        <file>fshader3a1.glsl</file>
-        <file>vshader3a1.glsl</file>
-        <file>fshader3a2.glsl</file>
-        <file>vshader3a2.glsl</file>
-        <file>fshader3b1.glsl</file>
-        <file>fshader3b2.glsl</file>
-        <file>vshader3b1.glsl</file>
-        <file>vshader3b2.glsl</file>
-        <file>fshader4a.glsl</file>
-        <file>fshader4b.glsl</file>
-        <file>vshader4a.glsl</file>
-        <file>vshader4b.glsl</file>
-        <file>fshader4c.glsl</file>
-        <file>fshader4d.glsl</file>
-        <file>fshader4e.glsl</file>
-        <file>vshader4c.glsl</file>
-        <file>vshader4d.glsl</file>
-        <file>vshader4e.glsl</file>
+        <file>fshaderThreshold.glsl</file>
+        <file>vshaderThreshold.glsl</file>
+        <file>fshaderBtct.glsl</file>
+        <file>vshaderBtct.glsl</file>
+        <file>fshaderGamma.glsl</file>
+        <file>vshaderGamma.glsl</file>
+        <file>fshaderQuant.glsl</file>
+        <file>vshaderQuant.glsl</file>
+        <file>fshaderHistogramStrech.glsl</file>
+        <file>vshaderHistogramStrech.glsl</file>
+        <file>fshaderBlur.glsl</file>
+        <file>vshaderBlur.glsl</file>
+        <file>fshaderSharpen.glsl</file>
+        <file>vshaderSharpen.glsl</file>
+        <file>maddot.pgm</file>
+        <file>fshaderMedian.glsl</file>
+        <file>vshaderMedian.glsl</file>
     </qresource>
 </RCC>
