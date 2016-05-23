@@ -30,7 +30,10 @@ HEADERS +=	MainWindow.h	\
     Histrogramstrech.h \
     Blur.h \
     Sharpen.h \
-    Median.h
+    Median.h \
+    Convolution.h \
+    Correlation.h \
+    Thresholdlut.h
 		
 SOURCES +=	main.cpp	\ 
 		MainWindow.cpp 	\
@@ -42,6 +45,9 @@ SOURCES +=	main.cpp	\
     Histrogramstrech.cpp \
     Blur.cpp \
     Sharpen.cpp \
-    Median.cpp
+    Median.cpp \
+    Convolution.cpp \
+    Correlation.cpp \
+    Thresholdlut.cpp
 
 DISTFILES +=

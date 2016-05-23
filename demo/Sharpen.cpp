@@ -76,7 +76,8 @@ QGroupBox *Sharpen::controlPanel()
 
 void Sharpen::reset()
 {
-
+    m_slider[0]->setValue(1);
+    m_slider[1]->setValue(1);
 }
 
 void Sharpen::initVertexBuffer()

@@ -27,6 +27,9 @@
 #include "Blur.h"
 #include "Sharpen.h"
 #include "Median.h"
+#include "Convolution.h"
+#include "Correlation.h"
+#include "Thresholdlut.h"
 
 QString GroupBoxStyle = "QGroupBox {				\
 			border: 2px solid gray;			\
@@ -103,7 +106,10 @@ MainWindow::createWidgets()
              << "Histogram Strech"
              << "Blur"
              << "Sharpen"
-             << "Median";
+             << "Median"
+             << "Convolution"
+             << "Correlation"
+             << "Threshold Lut";
 
 
 	// instantiate homework solution classes
@@ -125,6 +131,9 @@ MainWindow::createWidgets()
     m_hw[m_hwName[5]] = new Blur;
     m_hw[m_hwName[6]] = new Sharpen;
     m_hw[m_hwName[7]] = new Median;
+    m_hw[m_hwName[8]] = new Convolution;
+    m_hw[m_hwName[9]] = new Correlation;
+    m_hw[m_hwName[10]]= new ThresholdLut;
 
 	// add control panels to stacked widget
 	for(int i = 0; i < (int) m_hwName.size(); i++)

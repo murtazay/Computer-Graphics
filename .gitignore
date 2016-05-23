@@ -70,3 +70,12 @@
 /build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/Sharpen.o
 /build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/Threshold.o
 /build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/qrc_hw.cpp
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/moc/moc_Convolution.cpp
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/moc/moc_Correlation.cpp
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/moc/moc_Thresholdlut.cpp
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/Convolution.o
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/Correlation.o
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/moc_Convolution.o
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/moc_Correlation.o
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/moc_Thresholdlut.o
+/build-hw-Desktop_Qt_5_6_0_GCC_64bit-Debug/obj/Thresholdlut.o

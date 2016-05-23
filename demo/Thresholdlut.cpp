@@ -1,65 +1,59 @@
-#include "Median.h"
+#include "Thresholdlut.h"
 
-enum{
-    PAD,
-    SIZE,
-    STEP,
-    SAMPLER
-};
+static int MXGRAY =256;
 
-Median::Median(QWidget *parent) : HW(parent)
+
+ThresholdLut::ThresholdLut(QWidget *parent) : HW(parent)
 {
-    m_pad = 1.f/256.f;
-    m_size = 9;
+    m_threshold = 128;
 }
 
-QGroupBox *Median::controlPanel()
+QGroupBox *ThresholdLut::controlPanel()
 {
     // init group box
-    m_ctrlGrp = new QGroupBox("Median");
+    m_ctrlGrp = new QGroupBox("Threshold Lut");
 
-    // INSERT YOUR CODE HERE
     // init widgets
-    // create label
-    QLabel *labelx = new QLabel;
-    labelx->setText("Filter Size");
+    // create label[i]
+    QLabel *label = new QLabel;
+    label->setText(QString("Thr"));
 
-    // create sliders
+    // create slider
     m_slider = new QSlider(Qt::Horizontal, m_ctrlGrp);
-    m_slider->setMinimum(1);
-    m_slider->setMaximum(3);
-    m_slider->setValue(1);
     m_slider->setTickPosition(QSlider::TicksBelow);
-    m_slider->setTickInterval(1);
+    m_slider->setTickInterval(25);
+    m_slider->setMinimum(1);
+    m_slider->setMaximum(MXGRAY);
+    m_slider->setValue  (MXGRAY>>1);
 
     // create spinbox
     m_spinBox = new QSpinBox(m_ctrlGrp);
-    m_spinBox->setSingleStep(2);
-    m_spinBox->setMinimum(3);
-    m_spinBox->setMaximum(7);
-    m_spinBox->setValue(3);
+    m_spinBox->setMinimum(1);
+    m_spinBox->setMaximum(MXGRAY);
+    m_spinBox->setValue  (MXGRAY>>1);
 
-    // init signal/slot connections
-    connect(m_slider  , SIGNAL(valueChanged(int)),         this,   SLOT(setSizeSlider(int)));
-    connect(m_spinBox , SIGNAL(valueChanged(int)),         this,   SLOT(setSizeSpinBox(int)));
-
+    // init signal/slot connections for Thresholdlut
+    connect(m_slider , SIGNAL(valueChanged(int)), this, SLOT(setThreshold(int)));
+    connect(m_slider, SIGNAL(valueChanged(int)),  m_spinBox, SLOT(setValue(int)));
+    connect(m_spinBox, SIGNAL(valueChanged(int)), m_slider, SLOT(setValue(int)));
     // assemble dialog
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(   labelx, 1, 0);
-    layout->addWidget( m_slider, 1, 1);
-    layout->addWidget(m_spinBox, 1, 2);
+    layout->addWidget(  label  , 0, 0);
+    layout->addWidget(m_slider , 0, 1);
+    layout->addWidget(m_spinBox, 0, 2);
 
     // assign layout to group box
     m_ctrlGrp->setLayout(layout);
+
     return(m_ctrlGrp);
 }
 
-void Median::reset()
+void ThresholdLut::reset()
 {
-    m_slider->setValue(1);
+    m_slider->setValue(128);
 }
 
-void Median::initVertexBuffer()
+void ThresholdLut::initVertexBuffer()
 {
     // set flag for creating buffers (1st time only)
     static bool flag = 1;
@@ -116,16 +110,16 @@ void Median::initVertexBuffer()
     glVertexAttribPointer(ATTRIB_TEXTURE_POSITION, 2, GL_FLOAT, false, 0, NULL);
 }
 
-void Median::initShaders()
+void ThresholdLut::initShaders()
 {
     // compile vertex shader
-    if(!m_program.addShaderFromSourceFile(QGLShader::Vertex, ":/vshaderMedian.glsl")) {
+    if(!m_program.addShaderFromSourceFile(QGLShader::Vertex, ":/vshaderThresholdLut.glsl")) {
         QMessageBox::critical(0, "Error", "Vertex shader error", QMessageBox::Ok);
         QApplication::quit();
     }
 
     // compile fragment shader
-    if(!m_program.addShaderFromSourceFile(QGLShader::Fragment, ":/fshaderMedian.glsl")) {
+    if(!m_program.addShaderFromSourceFile(QGLShader::Fragment, ":/fshaderThresholdLut.glsl")) {
         QMessageBox::critical(0, "Error", "Fragment shader error",QMessageBox::Ok);
         QApplication::quit();
     }
@@ -149,45 +143,30 @@ void Median::initShaders()
     // bind the glsl progam
     glUseProgram(m_program.programId());
 
-    // get storage location of u_brightness in fragment shader
-    m_uniforms[SIZE] = glGetUniformLocation(m_program.programId(),"u_size");
-    if((int) m_uniforms[SIZE] < 0){
-        qDebug() << "Failed to get the storage location of u_size";
+    // get storage location of u_Twist in fragment shader
+    m_u_threshold = glGetUniformLocation(m_program.programId(),"u_threshold");
+    if((int) m_u_threshold < 0){
+        qDebug() << "Failed to get the storage location of u_threshold";
         exit(-1);
     }
 
-    // get storage location of u_brightness in fragment shader
-    m_uniforms[PAD] = glGetUniformLocation(m_program.programId(),"u_pad");
-    if((int) m_uniforms[PAD] < 0){
-        qDebug() << "Failed to get the storage location of u_pad";
-        exit(-1);
-    }
-
-    // get storage location of u_brightness in fragment shader
-    m_uniforms[STEP] = glGetUniformLocation(m_program.programId(),"u_step");
-    if((int) m_uniforms[STEP] < 0){
-        qDebug() << "Failed to get the storage location of u_step";
-        exit(-1);
-    }
 
     // get storage location of u_Sampler in fragment shader
-    m_uniforms[SAMPLER] = glGetUniformLocation(m_program.programId(), "u_Sampler");
-    if((int) m_uniforms[SAMPLER] < 0) {
+    m_u_sampler = glGetUniformLocation(m_program.programId(), "u_Sampler");
+    if((int) m_u_sampler < 0) {
         qDebug() << "Failed to get the storage location of u_Sampler";
         exit(-1);
     }
 
     // init uniform variables and pass
-    glUniform1f(m_uniforms[PAD]   , m_pad);
-    glUniform1i(m_uniforms[SIZE]  , m_size);
-    glUniform1f(m_uniforms[STEP]   , 1.f/256.f);
-    glUniform1f(m_uniforms[SAMPLER], GL_TEXTURE0);
+    glUniform1i(m_u_sampler  , GL_TEXTURE0);
+    glUniform1i(m_u_threshold, GL_TEXTURE1);
 }
 
-void Median::initTexture()
+void ThresholdLut::initTexture()
 {
     // read image from file
-    m_image.load(QString(":/maddot.pgm"));
+    m_image.load(QString(":/mandrill.jpg"));
 
     // convert jpg to GL formatted image
     QImage qImage = QGLWidget::convertToGLFormat(m_image);
@@ -207,29 +186,44 @@ void Median::initTexture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, qImage.bits());
+
+    glActiveTexture(GL_TEXTURE1);
+    glGenTextures(1, &m_texture1);
+    glBindTexture(GL_TEXTURE_1D, m_texture1);
+
+    int i;
+    for(i = 0.f; i < m_threshold; ++i){
+        m_lut[i] = 0;
+    }
+    for(       ; i < MXGRAY; ++i){
+        m_lut[i] = 255;
+    }
+
+    glTexImage1D(GL_TEXTURE_1D, 0, GL_R8, 256, 0, GL_RED, GL_UNSIGNED_BYTE, &m_lut);
 }
 
-void Median::setSizeSlider(int)
+void ThresholdLut::initLut(float thr)
 {
-    m_spinBox->setValue((m_slider->value() * 2) + 1);
-    m_pad = ((m_spinBox->value()-1)/2)/256.f;
-    m_size = m_spinBox->value() * m_spinBox->value();
-    glUniform1f(m_uniforms[PAD]  , m_pad);
-    glUniform1i(m_uniforms[SIZE]  , m_size);
+    int i;
+    for(i = 0.f; i < thr; ++i){
+        m_lut[i] = 0;
+    }
+    for(       ; i < MXGRAY; ++i){
+        m_lut[i] = 255;
+    }
+
+    glTexImage1D(GL_TEXTURE_1D, 0, GL_R8, 256, 0, GL_RED, GL_FLOAT, m_lut);
+}
+
+void ThresholdLut::setThreshold(int thr)
+{
+    m_threshold = thr;
+    initLut(m_threshold);
+    glUniform1i(m_u_threshold, GL_TEXTURE1);
     updateGL();
 }
 
-void Median::setSizeSpinBox(int)
-{
-    m_slider->setValue((m_spinBox->value()-1)/2);
-    m_pad = ((m_spinBox->value()-1)/2)/256.f;
-    m_size = m_spinBox->value() * m_spinBox->value();
-    glUniform1f(m_uniforms[PAD]  , m_pad);
-    glUniform1i(m_uniforms[SIZE]  , m_size);
-    updateGL();
-}
-
-void Median::initializeGL()
+void ThresholdLut::initializeGL()
 {
     // initialize GL function resolution for current context
     initializeGLFunctions();
@@ -244,7 +238,7 @@ void Median::initializeGL()
     initVertexBuffer();
 }
 
-void Median::resizeGL(int w, int h)
+void ThresholdLut::resizeGL(int w, int h)
 {
     // save window dimensions
     m_winW = w;
@@ -270,7 +264,7 @@ void Median::resizeGL(int w, int h)
     glOrtho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
 }
 
-void Median::paintGL()
+void ThresholdLut::paintGL()
 {
     clock_t t = clock();
     // clear canvas with background color
@@ -280,5 +274,5 @@ void Median::paintGL()
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;
-    qDebug() << "MEDIAN:" <<(float)t/CLOCKS_PER_SEC;
+    qDebug()<< "Threshold Lut:" <<(float) t / CLOCKS_PER_SEC;
 }

@@ -18,5 +18,12 @@
         <file>maddot.pgm</file>
         <file>fshaderMedian.glsl</file>
         <file>vshaderMedian.glsl</file>
+        <file>fshaderConvolution.glsl</file>
+        <file>vshaderConvolution.glsl</file>
+        <file>fshaderCorrelation.glsl</file>
+        <file>vshaderCorrelation.glsl</file>
+        <file>template.jpg</file>
+        <file>fshaderThresholdLut.glsl</file>
+        <file>vshaderThresholdLut.glsl</file>
     </qresource>
 </RCC>
