@@ -1,4 +1,5 @@
 #include "Btct.h"
+#include <time.h>
 
 enum{
     BRIGHTNESS,

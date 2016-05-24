@@ -1,4 +1,5 @@
 #include "Blur.h"
+#include <time.h>
 
 enum{
     XSIZE,

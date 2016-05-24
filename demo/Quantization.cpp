@@ -1,4 +1,5 @@
 #include "Quantization.h"
+#include <time.h>
 
 enum{
     SCALE,

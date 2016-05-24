@@ -1,6 +1,7 @@
 #include "Threshold.h"
+#include <time.h>
 
-static int MXGRAY =256;
+static int MXGRAY = 255;
 
 
 Threshold::Threshold(QWidget *parent) : HW(parent)
@@ -33,9 +34,9 @@ QGroupBox *Threshold::controlPanel()
     m_spinBox->setValue  (MXGRAY>>1);
 
     // init signal/slot connections for Threshold
-    connect(m_slider , SIGNAL(valueChanged(int)), this, SLOT(setThreshold(int)));
-    connect(m_slider, SIGNAL(valueChanged(int)),  m_spinBox, SLOT(setValue(int)));
-    connect(m_spinBox, SIGNAL(valueChanged(int)), m_slider, SLOT(setValue(int)));
+    connect(m_slider , SIGNAL(valueChanged(int)), this     , SLOT(setThreshold(int)));
+    connect(m_slider , SIGNAL(valueChanged(int)), m_spinBox, SLOT(setValue(int)));
+    connect(m_spinBox, SIGNAL(valueChanged(int)), m_slider , SLOT(setValue(int)));
     // assemble dialog
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(  label  , 0, 0);
@@ -208,7 +209,6 @@ void Threshold::initializeGL()
 
     // initialize vertex buffer and write positions to vertex shader
     initVertexBuffer();
-
 }
 
 void Threshold::resizeGL(int w, int h)

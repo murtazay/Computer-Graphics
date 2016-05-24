@@ -1,4 +1,5 @@
 #include "Median.h"
+#include <time.h>
 
 enum{
     PAD,

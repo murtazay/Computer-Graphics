@@ -23,29 +23,29 @@ unix:!macx {
 # Input
 HEADERS +=	MainWindow.h	\
                 HW.h		\
-    Threshold.h \
-    Btct.h \
-    Gamma.h \
-    Quantization.h \
-    Histrogramstrech.h \
-    Blur.h \
-    Sharpen.h \
-    Median.h \
-    Convolution.h \
-    Correlation.h
+                Threshold.h \
+                Btct.h \
+                Gamma.h \
+                Quantization.h \
+                Histrogramstrech.h \
+                Blur.h \
+                Sharpen.h \
+                Median.h \
+                Convolution.h \
+                Correlation.h
 		
 SOURCES +=	main.cpp	\ 
 		MainWindow.cpp 	\
                 HW.cpp		\
-    Threshold.cpp \
-    Btct.cpp \
-    Gamma.cpp \
-    Quantization.cpp \
-    Histrogramstrech.cpp \
-    Blur.cpp \
-    Sharpen.cpp \
-    Median.cpp \
-    Convolution.cpp \
-    Correlation.cpp
+                Threshold.cpp \
+                Btct.cpp \
+                Gamma.cpp \
+                Quantization.cpp \
+                Histrogramstrech.cpp \
+                Blur.cpp \
+                Sharpen.cpp \
+                Median.cpp \
+                Convolution.cpp \
+                Correlation.cpp
 
 DISTFILES +=

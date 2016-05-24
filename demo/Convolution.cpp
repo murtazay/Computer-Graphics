@@ -1,4 +1,5 @@
 #include "Convolution.h"
+#include <time.h>
 
 enum{
     TL,

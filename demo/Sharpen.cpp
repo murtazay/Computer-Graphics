@@ -1,4 +1,5 @@
 #include "Sharpen.h"
+#include <time.h>
 
 enum{
     SIZE,

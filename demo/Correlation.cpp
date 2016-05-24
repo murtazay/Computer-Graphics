@@ -1,4 +1,5 @@
 #include "Correlation.h"
+#include <time.h>
 
 enum{
     SAMPLER,

@@ -1,4 +1,5 @@
 #include "Histrogramstrech.h"
+#include <time.h>
 
 enum{
     MIN,

@@ -1,4 +1,5 @@
 #include "Gamma.h"
+#include <time.h>
 
 enum{
     GAMMA,
@@ -195,7 +196,9 @@ void Gamma::initTexture()
 void Gamma::setGamma(int gam)
 {
     double g = (double) gam/10;
+    m_spinBox->blockSignals(true);
     m_spinBox->setValue(g);
+    m_spinBox->blockSignals(false);
     glUniform1f(m_uniforms[GAMMA], 1.f/g);
     updateGL();
 }
@@ -203,8 +206,10 @@ void Gamma::setGamma(int gam)
 void Gamma::setGamma(double gam)
 {
     int g = (int) (gam*10);
+    m_slider->blockSignals(true);
     m_slider->setValue(g);
-    glUniform1f(m_uniforms[GAMMA], 1.f/g);
+    m_slider->blockSignals(false);
+    glUniform1f(m_uniforms[GAMMA], 1.f/gam);
     updateGL();
 }
 
