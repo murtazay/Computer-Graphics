@@ -160,7 +160,7 @@ void Threshold::initShaders()
 
     // init uniform variables and pass
     glUniform1f(m_u_threshold, m_threshold/MXGRAY);
-    glUniform1i(m_u_sampler, GL_TEXTURE0);
+    glUniform1i(m_u_sampler  , GL_TEXTURE0);
 }
 
 void Threshold::initTexture()
@@ -243,7 +243,7 @@ void Threshold::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

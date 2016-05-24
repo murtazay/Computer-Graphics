@@ -37,11 +37,13 @@ void main() {
     color += colors[6] * u_botl;
     color += colors[7] * u_botm;
     color += colors[8] * u_botr;
+    // Blur
     if(u_topl == 1.f && u_topm == 1.f && u_topr == 1.f &&
        u_left == 1.f && u_mid == 1.f && u_right == 1.f &&
        u_botl == 1.f && u_botm == 1.f && u_botr == 1.f){
         color = color/9.f;
     }
+    // Gaussian
     if(u_topl == 1.f && u_topm == 2.f && u_topr == 1.f &&
        u_left == 2.f && u_mid == 4.f && u_right == 2.f &&
        u_botl == 1.f && u_botm == 2.f && u_botr == 1.f){

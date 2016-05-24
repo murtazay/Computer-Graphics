@@ -8,7 +8,5 @@ uniform float       u_gamma;
 
 void main() {
     gl_FragColor = texture2D(u_Sampler, v_TexCoord);
-    gl_FragColor.r = pow(gl_FragColor.r, u_gamma);
-    gl_FragColor.g = pow(gl_FragColor.g, u_gamma);
-    gl_FragColor.b = pow(gl_FragColor.b, u_gamma);
+    gl_FragColor = vec4(pow(gl_FragColor.rgb, vec3(u_gamma)),1.f);
 }

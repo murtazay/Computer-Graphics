@@ -161,7 +161,7 @@ void Quantization::initShaders()
     }
 
     // init uniform variables and pass
-    glUniform1f(m_uniforms[SCALE],   1.f/m_level);
+    glUniform1f(m_uniforms[SCALE]  , 1.f/m_level);
     glUniform1f(m_uniforms[SAMPLER], GL_TEXTURE0);
 }
 
@@ -244,7 +244,7 @@ void Quantization::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

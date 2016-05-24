@@ -17,8 +17,6 @@ public:
 public slots:
     void        setMin(int);
     void        setMax(int);
-//    void        setMin(bool);
-//    void        setMax(bool);
 protected:
     void        initializeGL();
     void        resizeGL(int,int);

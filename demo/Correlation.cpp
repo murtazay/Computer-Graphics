@@ -13,7 +13,7 @@ enum{
     YPAD
 };
 
-Correlation::Correlation(QWidget *parent)
+Correlation::Correlation(QWidget *parent) : HW(parent)
 {
 
 }
@@ -27,7 +27,7 @@ QGroupBox *Correlation::controlPanel()
 
 void Correlation::reset()
 {
-
+    //No reset?
 }
 
 void Correlation::initVertexBuffer()
@@ -305,7 +305,7 @@ void Correlation::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

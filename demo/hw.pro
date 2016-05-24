@@ -32,8 +32,7 @@ HEADERS +=	MainWindow.h	\
     Sharpen.h \
     Median.h \
     Convolution.h \
-    Correlation.h \
-    Thresholdlut.h
+    Correlation.h
 		
 SOURCES +=	main.cpp	\ 
 		MainWindow.cpp 	\
@@ -47,7 +46,6 @@ SOURCES +=	main.cpp	\
     Sharpen.cpp \
     Median.cpp \
     Convolution.cpp \
-    Correlation.cpp \
-    Thresholdlut.cpp
+    Correlation.cpp
 
 DISTFILES +=

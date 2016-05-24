@@ -178,8 +178,8 @@ void Median::initShaders()
     }
 
     // init uniform variables and pass
-    glUniform1f(m_uniforms[PAD]   , m_pad);
-    glUniform1i(m_uniforms[SIZE]  , m_size);
+    glUniform1f(m_uniforms[PAD]    , m_pad);
+    glUniform1i(m_uniforms[SIZE]   , m_size);
     glUniform1f(m_uniforms[STEP]   , 1.f/256.f);
     glUniform1f(m_uniforms[SAMPLER], GL_TEXTURE0);
 }
@@ -276,7 +276,7 @@ void Median::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

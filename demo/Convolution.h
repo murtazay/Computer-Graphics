@@ -40,6 +40,7 @@ private:
     std::vector<vec2>   m_points;
     QGroupBox          *m_ctrlGrp;
     QSpinBox           *m_spinBox[9];
+    QPushButton        *m_button;
 };
 
 #endif // CONVOLUTION_H

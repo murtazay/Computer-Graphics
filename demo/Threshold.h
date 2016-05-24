@@ -30,10 +30,10 @@ private:
     GLuint              m_texture;
     GLuint              m_u_sampler;
     QGLShaderProgram    m_program;
-    QGroupBox          *m_ctrlGrp;
     std::vector<vec2>   m_points;
-    QSlider		*m_slider ;	// Threshold sliders
-    QSpinBox	*m_spinBox;	// Threshold spin boxes
+    QGroupBox          *m_ctrlGrp;
+    QSlider            *m_slider ;	// Threshold sliders
+    QSpinBox           *m_spinBox;	// Threshold spin boxes
 };
 
 #endif // THRESHOLD_H

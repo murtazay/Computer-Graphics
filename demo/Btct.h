@@ -14,7 +14,6 @@ public:
     void		initVertexBuffer    ();		// init vertices
     void		initShaders         ();		// init shaders
     void		initTexture         ();		// init texture image
-    void        initLookupTable     ();
 public slots:
     void        setBrightness(int);
     void        setContrast  (int);

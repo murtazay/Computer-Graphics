@@ -50,29 +50,21 @@ QGroupBox *HistrogramStrech::controlPanel()
     m_spinBox[MAX]->setMaximum(255);
     m_spinBox[MAX]->setValue(255);
 
-//    // create checkboxes
-//    m_checkBox[MIN] = new QCheckBox("Auto");
-//    m_checkBox[MAX] = new QCheckBox("Auto");
-
     // init signal/slot connections
     connect( m_slider [MIN], SIGNAL(valueChanged(int)), this, SLOT(setMin(int)));
     connect( m_spinBox[MIN], SIGNAL(valueChanged(int)), this, SLOT(setMin(int)));
-//    connect(m_checkBox[MIN], SIGNAL(toggled(bool))    , this, SLOT(setMinAuto(bool)));
 
     connect( m_slider [MAX], SIGNAL(valueChanged(int)), this, SLOT(setMax(int)));
     connect( m_spinBox[MAX], SIGNAL(valueChanged(int)), this, SLOT(setMax(int)));
-//    connect(m_checkBox[MAX], SIGNAL(toggled(bool))    , this, SLOT(setMaxAuto(bool)));
 
     // assemble dialog
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(     label[MIN], 0, 0);
     layout->addWidget(  m_slider[MIN], 0, 1);
     layout->addWidget( m_spinBox[MIN], 0, 2);
-//    layout->addWidget(m_checkBox[MIN], 0, 3);
     layout->addWidget(     label[MAX], 1, 0);
     layout->addWidget(  m_slider[MAX], 1, 1);
     layout->addWidget( m_spinBox[MAX], 1, 2);
-//    layout->addWidget(m_checkBox[MAX], 1, 3);
 
     // assign layout to group box
     m_ctrlGrp->setLayout(layout);
@@ -197,8 +189,8 @@ void HistrogramStrech::initShaders()
     }
 
     // init uniform variables and pass
-    glUniform1f(m_uniforms[MIN],   m_min);
-    glUniform1f(m_uniforms[MAX],   m_max);
+    glUniform1f(m_uniforms[MIN]    ,   m_min);
+    glUniform1f(m_uniforms[MAX]    ,   m_max);
     glUniform1f(m_uniforms[SAMPLER], GL_TEXTURE0);
 }
 
@@ -257,16 +249,6 @@ void HistrogramStrech::setMax(int max)
     updateGL();
 }
 
-//void HistrogramStrech::setMin(bool)
-//{
-
-//}
-
-//void HistrogramStrech::setMax(bool)
-//{
-
-//}
-
 void HistrogramStrech::initializeGL()
 {
     // initialize GL function resolution for current context
@@ -314,7 +296,7 @@ void HistrogramStrech::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

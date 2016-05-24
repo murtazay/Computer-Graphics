@@ -220,9 +220,9 @@ void BTCT::initShaders()
 
     // init uniform variables and pass
     glUniform1f(m_uniforms[BRIGHTNESS], m_brightness);
-    glUniform1f(m_uniforms[CONTRAST],   m_contrast);
-    glUniform1f(m_uniforms[REFRENCE],   m_refrence);
-    glUniform1f(m_uniforms[SAMPLER], GL_TEXTURE0);
+    glUniform1f(m_uniforms[CONTRAST]  ,   m_contrast);
+    glUniform1f(m_uniforms[REFRENCE]  ,   m_refrence);
+    glUniform1f(m_uniforms[SAMPLER]   ,  GL_TEXTURE0);
 }
 
 void BTCT::initTexture()
@@ -323,7 +323,7 @@ void BTCT::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

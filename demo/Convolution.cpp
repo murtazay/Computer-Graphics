@@ -36,15 +36,18 @@ QGroupBox *Convolution::controlPanel()
     }
     m_spinBox[M]->setValue(1);
 
+    m_button = new QPushButton("Update");
+
     connect(m_spinBox[TL], SIGNAL(valueChanged(int)), this, SLOT(setTL(int)));
     connect(m_spinBox[TM], SIGNAL(valueChanged(int)), this, SLOT(setTM(int)));
     connect(m_spinBox[TR], SIGNAL(valueChanged(int)), this, SLOT(setTR(int)));
-    connect(m_spinBox[L], SIGNAL(valueChanged(int)), this, SLOT(setL(int)));
-    connect(m_spinBox[M], SIGNAL(valueChanged(int)), this, SLOT(setM(int)));
-    connect(m_spinBox[R], SIGNAL(valueChanged(int)), this, SLOT(setR(int)));
+    connect(m_spinBox[L] , SIGNAL(valueChanged(int)), this, SLOT(setL(int)));
+    connect(m_spinBox[M] , SIGNAL(valueChanged(int)), this, SLOT(setM(int)));
+    connect(m_spinBox[R] , SIGNAL(valueChanged(int)), this, SLOT(setR(int)));
     connect(m_spinBox[BL], SIGNAL(valueChanged(int)), this, SLOT(setBL(int)));
     connect(m_spinBox[BM], SIGNAL(valueChanged(int)), this, SLOT(setBM(int)));
     connect(m_spinBox[BR], SIGNAL(valueChanged(int)), this, SLOT(setBR(int)));
+    connect(m_button     , SIGNAL(pressed())        , this, SLOT(updateGL()));
 
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(m_spinBox[TL], 0, 0);
@@ -56,6 +59,7 @@ QGroupBox *Convolution::controlPanel()
     layout->addWidget(m_spinBox[BL], 2, 0);
     layout->addWidget(m_spinBox[BM], 2, 1);
     layout->addWidget(m_spinBox[BR], 2, 2);
+    layout->addWidget(m_button     , 3, 0, 3, 3);
 
     m_ctrlGrp->setLayout(layout);
     return(m_ctrlGrp);
@@ -67,6 +71,7 @@ void Convolution::reset()
         m_spinBox[i]->setValue(0);
     }
     m_spinBox[M]->setValue(1);
+    m_button->pressed();
 }
 
 void Convolution::initVertexBuffer()
@@ -247,16 +252,16 @@ void Convolution::initShaders()
     }
 
     // init uniform variables and pass
-    glUniform1f(m_uniforms[TL]  , m_kernal[TL]);
-    glUniform1f(m_uniforms[TM]  , m_kernal[TM]);
-    glUniform1f(m_uniforms[TR]  , m_kernal[TR]);
-    glUniform1f(m_uniforms[L]  , m_kernal[L]);
-    glUniform1f(m_uniforms[M]  , m_kernal[M]);
-    glUniform1f(m_uniforms[R]  , m_kernal[R]);
-    glUniform1f(m_uniforms[BL]  , m_kernal[BL]);
-    glUniform1f(m_uniforms[BM]  , m_kernal[BM]);
-    glUniform1f(m_uniforms[BR]  , m_kernal[BR]);
-    glUniform1f(m_uniforms[PAD]   , 1.f/512.f);
+    glUniform1f(m_uniforms[TL]     , m_kernal[TL]);
+    glUniform1f(m_uniforms[TM]     , m_kernal[TM]);
+    glUniform1f(m_uniforms[TR]     , m_kernal[TR]);
+    glUniform1f(m_uniforms[L]      , m_kernal[L]);
+    glUniform1f(m_uniforms[M]      , m_kernal[M]);
+    glUniform1f(m_uniforms[R]      , m_kernal[R]);
+    glUniform1f(m_uniforms[BL]     , m_kernal[BL]);
+    glUniform1f(m_uniforms[BM]     , m_kernal[BM]);
+    glUniform1f(m_uniforms[BR]     , m_kernal[BR]);
+    glUniform1f(m_uniforms[PAD]    , 1.f/512.f);
     glUniform1f(m_uniforms[STEP]   , 1.f/512.f);
     glUniform1f(m_uniforms[SAMPLER], GL_TEXTURE0);
 
@@ -264,7 +269,6 @@ void Convolution::initShaders()
 
 void Convolution::initTexture()
 {
-
     // read image from file
     m_image.load(QString(":/mandrill.jpg"));
 
@@ -286,70 +290,60 @@ void Convolution::initTexture()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, qImage.bits());
-
 }
 
 void Convolution::setTL(int)
 {
     m_kernal[TL] = m_spinBox[TL]->value();
     glUniform1f(m_uniforms[TL], m_kernal[TL]);
-    updateGL();
 }
 
 void Convolution::setTM(int)
 {
     m_kernal[TM] = m_spinBox[TM]->value();
     glUniform1f(m_uniforms[TM], m_kernal[TM]);
-    updateGL();
 }
 
 void Convolution::setTR(int)
 {
     m_kernal[TR] = m_spinBox[TR]->value();
     glUniform1f(m_uniforms[TR], m_kernal[TR]);
-    updateGL();
 }
 
 void Convolution::setL(int)
 {
     m_kernal[L] = m_spinBox[L]->value();
     glUniform1f(m_uniforms[L], m_kernal[L]);
-    updateGL();
 }
 
 void Convolution::setM(int)
 {
     m_kernal[M] = m_spinBox[M]->value();
     glUniform1f(m_uniforms[M], m_kernal[M]);
-    updateGL();
 }
 
 void Convolution::setR(int)
 {
     m_kernal[R] = m_spinBox[R]->value();
     glUniform1f(m_uniforms[R], m_kernal[R]);
-    updateGL();
 }
 
 void Convolution::setBL(int)
 {
     m_kernal[BL] = m_spinBox[BL]->value();
     glUniform1f(m_uniforms[BL], m_kernal[BL]);
-    updateGL();
 }
 
 void Convolution::setBM(int)
 {
     m_kernal[BM] = m_spinBox[BM]->value();
     glUniform1f(m_uniforms[BM], m_kernal[BM]);
-    updateGL();
 }
 
 void Convolution::setBR(int)
 {
     m_kernal[BR] = m_spinBox[BR]->value();
     glUniform1f(m_uniforms[BR], m_kernal[BR]);
-    updateGL();
 }
 
 void Convolution::initializeGL()
@@ -402,7 +396,7 @@ void Convolution::paintGL()
     // clear canvas with background color
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw triangles
+    // draw quadss
     glUseProgram(m_program.programId());
     glDrawArrays(GL_QUADS, 0, (GLsizei)m_numofpoints);
     t = clock() - t;

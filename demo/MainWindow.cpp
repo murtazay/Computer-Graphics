@@ -5,20 +5,10 @@
 // MainWindow.cpp - MainWindow class
 //
 // Written by: George Wolberg, 2015
-// Modified by: Lukas Rascius,Murtaza Yaqoob and Ethan Graber, 2015
+// Modified by: Murtaza Yaqoob 2016
 // ================================================================
 
 #include "MainWindow.h"
-//#include "HW0a.h"
-//#include "HW0b.h"
-//#include "HW0c.h"
-//#include "HW1a.h"
-//#include "HW1b.h"
-//#include "HW2a.h"
-//#include "HW2b.h"
-//#include "HW3a.h"
-//#include "HW3b.h"
-//#include "HW4.h"
 #include "Threshold.h"
 #include "Btct.h"
 #include "Gamma.h"
@@ -29,7 +19,6 @@
 #include "Median.h"
 #include "Convolution.h"
 #include "Correlation.h"
-#include "Thresholdlut.h"
 
 QString GroupBoxStyle = "QGroupBox {				\
 			border: 2px solid gray;			\
@@ -89,16 +78,6 @@ MainWindow::createWidgets()
 {
 	// create list of hw names; m_hwName name will be used for
 	// tab name and as key for class in m_hw container
-/*    m_hwName << "HW 0a"
-             << "HW 0b"
-             << "HW 0c"
-             << "HW 1a"
-             << "HW 1b"
-             << "HW 2a"
-             << "HW 2b"
-             << "HW 3a"
-             << "HW 3b"
-             << "HW 4";*/
     m_hwName << "Threshold"
              << "Contrast"
              << "Gamma"
@@ -108,21 +87,10 @@ MainWindow::createWidgets()
              << "Sharpen"
              << "Median"
              << "Convolution"
-             << "Correlation"
-             << "Threshold Lut";
+             << "Correlation";
 
 
-	// instantiate homework solution classes
-//	m_hw[m_hwName[0]] = new HW0a;
-//	m_hw[m_hwName[1]] = new HW0b;
-//	m_hw[m_hwName[2]] = new HW0c;
-//    m_hw[m_hwName[3]] = new HW1a;
-//    m_hw[m_hwName[4]] = new HW1b;
-//    m_hw[m_hwName[5]] = new HW2a;
-//    m_hw[m_hwName[6]] = new HW2b;
-//    m_hw[m_hwName[7]] = new HW3a;
-//    m_hw[m_hwName[8]] = new HW3b;
-//    m_hw[m_hwName[9]] = new HW4;
+    // instantiate homework solution classes
     m_hw[m_hwName[0]] = new Threshold;
     m_hw[m_hwName[1]] = new BTCT;
     m_hw[m_hwName[2]] = new Gamma;
@@ -133,7 +101,6 @@ MainWindow::createWidgets()
     m_hw[m_hwName[7]] = new Median;
     m_hw[m_hwName[8]] = new Convolution;
     m_hw[m_hwName[9]] = new Correlation;
-    m_hw[m_hwName[10]]= new ThresholdLut;
 
 	// add control panels to stacked widget
 	for(int i = 0; i < (int) m_hwName.size(); i++)
